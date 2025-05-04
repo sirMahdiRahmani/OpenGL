@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(GLEW_DIR ${CMAKE_SOURCE_DIR}/Dependencies/glew)
 set(GLFW_DIR ${CMAKE_SOURCE_DIR}/Dependencies/glfw)
 
+set (CMAKE 1)
+
 file(COPY ${GLEW_DIR}/lib/Release/x64/ DESTINATION ${CMAKE_BINARY_DIR})
 file(COPY ${GLFW_DIR}/x64/lib-vc2022/ DESTINATION ${CMAKE_BINARY_DIR})
 
@@ -19,7 +21,13 @@ file(GLOB SOURCES ${CMAKE_SOURCE_DIR}/OpenGL/Source/*.cpp)
 
 # define .cpp files as executable
 add_executable(${PROJECT_NAME} ${SOURCES})
+
 add_definitions(-DGLEW_STATIC)
+
+target_compile_definitions(OpenGL 
+    PRIVATE PROJECT_PATH="${CMAKE_SOURCE_DIR}/OpenGL"
+    PRIVATE CMAKE=1)
+
 target_link_libraries(${PROJECT_NAME}
     ${GLEW_DIR}/lib/Release/x64/glew32s.lib
     ${GLFW_DIR}/x64/lib-vc2022/glfw3.lib

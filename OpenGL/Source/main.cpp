@@ -5,6 +5,12 @@
 #include <fstream>
 #include <sstream>
 
+#ifdef CMAKE
+    static std::string project_path = PROJECT_PATH "/";
+#else
+    static std::string project_path = "";
+#endif
+
 struct ShaderProgramSource
 {
     std::string VertexSource;
@@ -124,10 +130,11 @@ int main(void)
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
 
-    ShaderProgramSource sor = ParseShader("Resource/Shader/Basic.shader");
-    std::cout << "VERTEX\n" << sor.VertexSource << "\n\nFRAGMENT\n" << sor.FragmentSource << std::endl;
+    ShaderProgramSource Source = ParseShader(project_path + "Resource/Shader/Basic.shader");
 
-	unsigned int shader = CreateShader(sor.VertexSource, sor.FragmentSource);
+    std::cout << "VERTEX\n" << Source.VertexSource << "\n\nFRAGMENT\n" << Source.FragmentSource << std::endl;
+
+	unsigned int shader = CreateShader(Source.VertexSource, Source.FragmentSource);
     glUseProgram(shader);
 
 
